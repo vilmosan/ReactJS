@@ -1,14 +1,12 @@
 import React from 'react'
-import StatisticLine from './StatisticLine'
+import Part from './Part'
 
-const Content = (props) => {
-
-	console.log(props.partTexts);
+const Content = ({content}) => {
 	return (
 		<div>
-			<StatisticLine partText={props.partTexts[0]} exerciseCounter={props.exerciseCounters[0]}/>
-			<StatisticLine partText={props.partTexts[1]} exerciseCounter={props.exerciseCounters[1]}/>
-			<StatisticLine partText={props.partTexts[2]} exerciseCounter={props.exerciseCounters[2]}/>
+			{content.map(obj =>
+				<Part key={obj.id} courseText={obj.name} courseExercises={obj.exercises}/>
+			)}
 		</div>
 	)
 

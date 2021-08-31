@@ -3,7 +3,7 @@ import React from 'react'
 const Totals = (props) => {
 	return (
 		<>
-			<p>Number of exercises {props.totalExercises}</p>
+			<p>Number of exercises: {props.totalExercises}</p>
 		< />
 	)
 }

@@ -2,8 +2,129 @@ import React, {useEffect, useState} from 'react'
 import Button from './Button'
 import Statistics from './Statistics'
 import Course from './Course'
+import Person from './Person'
+import Phonebook from "./Phonebook";
+import Filter from "./Filter";
+import PersonForm from "./PersonForm";
 
 const App = () => {
+	const [ persons, setPersons ] = useState([
+		{ name: 'Arto Hellas', phone: '040-123456' },
+		{ name: 'Ada Lovelace', phone: '39-44-5323523' },
+		{ name: 'Dan Abramov', phone: '12-43-234345' },
+		{ name: 'Mary Poppendieck', phone: '39-23-6423122' }
+	])
+	const [ newName, setNewName ] = useState('')
+	const [ newPhone, setNewPhone ] = useState('')
+	const [ searchTerm, setSearchTerm ] = useState('')
+	const [ filteredPersonList, setFilteredPersonList ] = useState([])
+	const [showAll, setShowAll] = useState(true)
+
+	const addContact = (event) => {
+		event.preventDefault()
+
+		if(nameValidator(newName)){
+			const personObject = {
+				id: persons.length + 1,
+				name: newName,
+				phone: newPhone,
+			}
+
+			setPersons(persons.concat(personObject))
+			setNewName('')
+			setNewPhone('')
+		} else {
+			alert(`${newName} is already added to phonebook!`)
+		}
+
+	}
+
+	let renderedList;
+
+	const handleNameInputChange = (event) => setNewName(event.target.value);
+	const handlePhoneInputChange = (event) => setNewPhone(event.target.value);
+	const handleSearchInputChange = (event) => setSearchTerm(event.target.value);
+
+	useEffect(() => {
+		searchTerm.length > 0 ? setShowAll(false) : setShowAll(true)
+		let tmpFilteredList = [];
+		persons.forEach(p => {
+			if (p.name.indexOf(searchTerm) >= 0){
+				tmpFilteredList.push(p);
+			}
+		})
+		setFilteredPersonList(tmpFilteredList);
+	},[searchTerm]);
+
+	const nameValidator = (name) => {
+		let validName = true;
+		persons.forEach(person => {
+			if(person.name === name){
+				validName = false;
+			}
+		})
+		return validName
+	}
+
+	renderedList = showAll ? <Phonebook phonebook={persons}/> : <Phonebook phonebook={filteredPersonList}/>
+
+	return (
+		<div>
+			<h2>Phone Book</h2>
+			<div>
+				<Filter label="Search name:" onChange={handleSearchInputChange} value={searchTerm}/>
+			</div>
+			<h3>Add new contact</h3>
+			<PersonForm addContact={addContact} nameValue={newName} nameChange={handleNameInputChange} phoneValue={newPhone} phoneChange={handlePhoneInputChange}/>
+
+			<h3>Numbers</h3>
+			{renderedList}
+		</div>
+	)
+}
+
+/*const App = (props) => {
+	console.log(props);
+	const [ persons, setPersons ] = useState(props.phonebook)
+	const [ newPerson, setNewPerson ] = useState('')
+
+	const addContact = (event) => {
+		event.preventDefault()
+		const personObject = {
+			name: newPerson,
+			id: persons.length + 1,
+		}
+
+		setPersons(persons.concat(personObject))
+		setNewPerson('')
+	}
+	const handlePersonChange = (event) => {
+		console.log(event.target.value)
+		setNewPerson(event.target.value)
+	}
+
+	return (
+		<div>
+			<h2>Phonebook</h2>
+			<form onSubmit={addContact}>
+				<div>
+					<p>Name:</p>
+					<input
+						value={newPerson}
+						onChange={handlePersonChange}/>
+				</div>
+				<div>
+					<button type="submit">Add</button>
+				</div>
+			</form>
+			<h2>Numbers</h2>
+			<ul>
+				{persons.map(person =>
+					<Person key={person.id} person={person}/>
+				)}
+			</ul>
+		</div>
+	)*/
 
 	// << -- Part 1 Exercises -- >> //
 	// const part1 = 'Fundamentals of React'
@@ -87,58 +208,56 @@ const App = () => {
 	)*/
 
 	// << -- Part 2 Exercises -- >> //
-	const courses = [
-		{
-			name: 'Half Stack application development',
-			id: 1,
-			parts: [
-				{
-					name: 'Fundamentals of React',
-					exercises: 10,
-					id: 1
-				},
-				{
-					name: 'Using props to pass data',
-					exercises: 7,
-					id: 2
-				},
-				{
-					name: 'State of a component',
-					exercises: 14,
-					id: 3
-				},
-				{
-					name: 'Redux',
-					exercises: 11,
-					id: 4
-				}
-			]
-		},
-		{
-			name: 'Node.js',
-			id: 2,
-			parts: [
-				{
-					name: 'Routing',
-					exercises: 3,
-					id: 1
-				},
-				{
-					name: 'Middlewares',
-					exercises: 7,
-					id: 2
-				}
-			]
-		}
-	]
-	return (
-		<div>
-			{courses.map(course =>
-				<Course key={course.id} course={course}/>
-			)}
-		</div>
-	)
-
-}
+	// const courses = [
+	// 	{
+	// 		name: 'Half Stack application development',
+	// 		id: 1,
+	// 		parts: [
+	// 			{
+	// 				name: 'Fundamentals of React',
+	// 				exercises: 10,
+	// 				id: 1
+	// 			},
+	// 			{
+	// 				name: 'Using props to pass data',
+	// 				exercises: 7,
+	// 				id: 2
+	// 			},
+	// 			{
+	// 				name: 'State of a component',
+	// 				exercises: 14,
+	// 				id: 3
+	// 			},
+	// 			{
+	// 				name: 'Redux',
+	// 				exercises: 11,
+	// 				id: 4
+	// 			}
+	// 		]
+	// 	},
+	// 	{
+	// 		name: 'Node.js',
+	// 		id: 2,
+	// 		parts: [
+	// 			{
+	// 				name: 'Routing',
+	// 				exercises: 3,
+	// 				id: 1
+	// 			},
+	// 			{
+	// 				name: 'Middlewares',
+	// 				exercises: 7,
+	// 				id: 2
+	// 			}
+	// 		]
+	// 	}
+	// ]
+	// return (
+	// 	<div>
+	// 		{courses.map(course =>
+	// 			<Course key={course.id} course={course}/>
+	// 		)}
+	// 	</div>
+	// )
 
 export default App

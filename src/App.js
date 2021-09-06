@@ -9,7 +9,6 @@ const App = () => {
 	const [ countries, setCountries ] = useState([])
 	const [ searchTerm, setSearchTerm ] = useState('')
 	const [ filteredCountryList, setFilteredCountryList ] = useState([])
-	const [ overwhelmingResults, setOverwhelmingResults ] = useState(true)
 	let renderedList;
 
 	const initCountries = () => {
@@ -30,7 +29,6 @@ const App = () => {
 				tmpFilteredList.push(p);
 			}
 		})
-		tmpFilteredList.length > 10 ? setOverwhelmingResults(true) : setOverwhelmingResults(false)
 		setFilteredCountryList(tmpFilteredList);
 	},[searchTerm]);
 
